@@ -2,15 +2,10 @@ const Pool = require("pg").Pool;
 
 const pool = new Pool({
     user: "postgres",
-
-    //when pushing to the server 
-    //host: zom, 
-    //password:
-
-    //to test locally
-    host: "localhost",
+    host: "127.0.0.1", // ← this is the key change!
     database: "Movies",
-    port: 5432
+    password: "your_new_password",
+    port: 5433
 });
 
 module.exports = pool;

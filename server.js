@@ -1,8 +1,7 @@
 const express = require("express");
-const moviesRoutes = require('./src/movies/routes');
-
+const moviesRoutes = require('./src/movies/routes'); 
 const app = express();
-const port = 8003;
+const port = 3000;
 
 app.use(express.json());
 
@@ -11,12 +10,12 @@ app.use(cors({
     origin: '*'
 }));
 
-app.get("/", (req, res)=> {
+app.get("/", (req, res) => {
     res.send("Hello and Welcome!");
-})
+});
 
-//API Route 
-//http://localhost:8003/api/v1/movies
-app.use("/ap1/v1/movies", moviesRoutes);
+// API Route 
+// http://localhost:8003/api/v1/movies
+app.use("/api/v1/movies", moviesRoutes);
 
-app.listen(port, () => console.log('running on ${port}'));
+app.listen(port, () => console.log(`running on ${port}`));
