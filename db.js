@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-require("dotenv").config(); // 
+require("dotenv").config(); // ⬅️ Add this at the top
 
 const { Pool } = require("pg");
 
@@ -10,13 +9,11 @@ const pool = new Pool({
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT,
     ssl: {
-        rejectUnauthorized: false //for Render
+        rejectUnauthorized: false // Required for Render
     }
 });
 
 module.exports = pool;
-
-
 
 
 
@@ -37,7 +34,6 @@ module.exports = pool;
 //});
 
 //module.exports = pool;
-=======
 const Pool = require("pg").Pool;
 
 const pool = new Pool({
@@ -53,4 +49,3 @@ const pool = new Pool({
 });
 
 module.exports = pool;
->>>>>>> a7d284bf9c7c1b6870f958c9fdd0208e19a06ee1
