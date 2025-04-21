@@ -116,6 +116,54 @@ Deployment: Code is pushed to GitHub, and Render automatically deploys and runs 
 - PostgreSQL hosted on Render with SSL enabled
 
 ---
+## 🌐 Live API URL
+
+https://movies-api-4s7l.onrender.com
+
+yaml
+Copy
+Edit
+
+Example filtered request:
+https://movies-api-4s7l.onrender.com/api/v1/movies/search?title=dark
+
+yaml
+Copy
+Edit
+
+---
+
+## 🚀 Available Endpoints
+
+### 🔹 GET all movies
+GET /api/v1/movies
+
+pgsql
+Copy
+Edit
+Returns all movie records in the database.
+
+### 🔹 GET filtered movies by title
+GET /api/v1/movies/search?title=dark
+
+pgsql
+Copy
+Edit
+Returns movies where the title contains the query string. Search is case-insensitive and supports partial matches.
+
+---
+
+## 🔄 How It Works
+
+- **Express Server**: `server.js` sets up middleware, CORS, and mounts `/api/v1/movies` route.
+- **Routing**: `routes.js` connects endpoint logic to controller functions.
+- **Controller Logic**:
+  - `getMovies` → returns all movies from the `movieInfo` table.
+  - `getFilteredMovies` → filters movies by partial title match using `LIKE`.
+- **Queries Layer**: All SQL is organized in `queries.js` for clean separation.
+- **Database Connection**: `db.js` securely connects to PostgreSQL using `pg` and environment variables.
+- **Deployment**: Code is pushed to GitHub, auto-deployed by Render, and publicly exposed.
+
 
 ## 🧑‍💻 Author
 Mariah Martin — [@mlmartin44](https://github.com/mlmartin44)
