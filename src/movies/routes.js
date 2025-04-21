@@ -3,6 +3,10 @@ const controller = require('./controller');
 
 const router = Router();
 
-router.get('/', controller.getMovies);// the more contorollers I have **add here?
+// GET all movies
+router.get('/', controller.getMovies);
+
+// 🔍 GET filtered movies by title (e.g. ?title=matrix)
+router.get('/search', controller.getFilteredMovies);
 
 module.exports = router;

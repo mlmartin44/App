@@ -1,22 +1,25 @@
 const express = require("express");
+const cors = require("cors");
 const moviesRoutes = require('./src/movies/routes'); 
+require("dotenv").config();
+
 const app = express();
 const port = process.env.PORT || 3000;
 
-
+// Middleware
 app.use(express.json());
+app.use(cors({ origin: '*' }));
 
-const cors = require("cors");
-app.use(cors({
-    origin: '*'
-}));
-
+// Test route
 app.get("/", (req, res) => {
     res.send("Hello and Welcome!");
 });
 
-// API Route 
-// http://localhost:8003/api/v1/movies
+// API route
+// Example: GET /api/v1/movies?title=matrix
 app.use("/api/v1/movies", moviesRoutes);
 
-app.listen(port, () => console.log(`running on ${port}`));
+// Start server
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
