@@ -1,37 +1,69 @@
 const pool = require('../../db');
 const queries = require('./queries');
 
-// Get all movies
+// GET all movies
 const getMovies = (req, res) => {
     pool.query(queries.getMovies, (error, results) => {
         if (error) {
-            console.error("❌ Database error details:", error);
+            console.error("❌ Error fetching movies:", error);
             return res.status(500).send("Database error");
         }
         res.status(200).json(results.rows);
     });
 };
 
-// Get filtered movies by title
-const getFilteredMovies = (req, res) => {
-    const { title } = req.query;
-
-    if (!title) {
-        return res.status(400).send("Missing 'title' query parameter");
+// GET a movie by numeric id
+const getMovieById = (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+        return res.status(400).send("Invalid ID");
     }
-
-    // Use the query from queries.js
-    const values = [`%${title}%`];
-    pool.query(queries.searchMoviesByTitle, values, (error, results) => {
+    pool.query(queries.getMovieById, [id], (error, results) => {
         if (error) {
-            console.error("❌ Filter query error:", error);
+            console.error("❌ Error fetching by ID:", error);
             return res.status(500).send("Database error");
         }
-        res.status(200).json(results.rows);
+        if (results.rows.length === 0) {
+            return res.status(404).send("Movie not found");
+        }
+        res.status(200).json(results.rows[0]);
+    });
+};
+
+// POST add a new movie
+const addMovie = (req, res) => {
+    const { id, title } = req.body;
+    if (!id || !title) {
+        return res.status(400).send("Missing id or title");
+    }
+    pool.query(queries.addMovie, [id, title], (error) => {
+        if (error) {
+            console.error("❌ Error adding movie:", error);
+            return res.status(500).send("Database error");
+        }
+        res.status(201).send("Movie added successfully");
+    });
+};
+
+// PUT update movie title by ID
+const updateMovie = (req, res) => {
+    const id = parseInt(req.params.id);
+    const { title } = req.body;
+    if (!title) {
+        return res.status(400).send("Missing title");
+    }
+    pool.query(queries.updateMovie, [title, id], (error) => {
+        if (error) {
+            console.error("❌ Error updating movie:", error);
+            return res.status(500).send("Database error");
+        }
+        res.status(200).send("Movie updated successfully");
     });
 };
 
 module.exports = {
     getMovies,
-    getFilteredMovies,
+    getMovieById,
+    addMovie,
+    updateMovie
 };
