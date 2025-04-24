@@ -34,7 +34,7 @@ const getMovieById = (req, res) => {
 const addMovie = (req, res) => {
     const { title, year, genre, director } = req.body;
     if (!title || !year || !genre || !director) {
-        return res.status(400).send("Missing required fields");
+        return res.status(400).json({ error: "Missing required fields" });
     }
     pool.query(
         queries.addMovie,
@@ -42,9 +42,9 @@ const addMovie = (req, res) => {
         (error) => {
             if (error) {
                 console.error("❌ Error adding movie:", error);
-                return res.status(500).send("Database error");
+                return res.status(500).json({ error: "Database error" });
             }
-            res.status(201).json({ message: "Movie added successfully" });
+            res.status(201).json({ message: "Movie added successfully" }); // <-- HERE
         }
     );
 };
@@ -54,7 +54,7 @@ const updateMovie = (req, res) => {
     const id = parseInt(req.params.id);
     const { title, year, genre, director } = req.body;
     if (!title || !year || !genre || !director) {
-        return res.status(400).send("Missing required fields");
+        return res.status(400).json({ error: "Missing required fields" });
     }
     pool.query(
         queries.updateMovie,
@@ -62,12 +62,13 @@ const updateMovie = (req, res) => {
         (error) => {
             if (error) {
                 console.error("❌ Error updating movie:", error);
-                return res.status(500).send("Database error");
+                return res.status(500).json({ error: "Database error" });
             }
-            res.status(200).send("Movie updated successfully");
+            res.status(200).json({ message: "Movie updated successfully" }); // <-- HERE
         }
     );
 };
+
 
 module.exports = {
     getMovies,
