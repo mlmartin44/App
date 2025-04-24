@@ -37,8 +37,8 @@ const addMovie = (req, res) => {
         return res.status(400).send("Missing required fields");
     }
     pool.query(
-        queries.addMovie, 
-        [title, year, genre, director], 
+        queries.addMovie,
+        [title, year, genre, director],
         (error) => {
             if (error) {
                 console.error("❌ Error adding movie:", error);
