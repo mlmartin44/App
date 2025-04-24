@@ -44,7 +44,7 @@ const addMovie = (req, res) => {
                 console.error("❌ Error adding movie:", error);
                 return res.status(500).send("Database error");
             }
-            res.status(201).send("Movie added successfully");
+            res.status(201).json({ message: "Movie added successfully" });
         }
     );
 };
