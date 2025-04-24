@@ -49,20 +49,24 @@ const addMovie = (req, res) => {
     );
 };
 
-// PUT update movie title by ID
+// PUT update movie (all fields) by ID
 const updateMovie = (req, res) => {
     const id = parseInt(req.params.id);
-    const { title } = req.body;
-    if (!title) {
-        return res.status(400).send("Missing title");
+    const { title, year, genre, director } = req.body;
+    if (!title || !year || !genre || !director) {
+        return res.status(400).send("Missing required fields");
     }
-    pool.query(queries.updateMovie, [title, id], (error) => {
-        if (error) {
-            console.error("❌ Error updating movie:", error);
-            return res.status(500).send("Database error");
+    pool.query(
+        queries.updateMovie,
+        [title, year, genre, director, id],
+        (error) => {
+            if (error) {
+                console.error("❌ Error updating movie:", error);
+                return res.status(500).send("Database error");
+            }
+            res.status(200).send("Movie updated successfully");
         }
-        res.status(200).send("Movie updated successfully");
-    });
+    );
 };
 
 module.exports = {
