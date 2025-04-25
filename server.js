@@ -1,17 +1,34 @@
+const fs = require("fs");
+const http = require("http");
+const https = require("https");
 const express = require("express");
 const cors = require("cors");
-const helmet = require("helmet"); // <-- Import helmet
-const moviesRoutes = require('./src/movies/routes'); 
+const helmet = require("helmet");
+const moviesRoutes = require('./src/movies/routes');
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 3000;
 
 // Middleware
-app.use(helmet()); // <-- Add helmet middleware for security best practices
-app.disable('x-powered-by'); // <-- Explicitly disable X-Powered-By header
+app.use(helmet());
+app.disable('x-powered-by');
 app.use(express.json());
-app.use(cors({ origin: '*' }));
+
+// CORS: Allow only trusted domains (update as needed)
+const allowedOrigins = [
+  "http://localhost:3000",           // for local dev
+  "https://your-frontend.com"        // add your real domains
+];
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    } else {
+      return callback(new Error("Not allowed by CORS"));
+    }
+  }
+}));
 
 // Test route
 app.get("/", (req, res) => {
@@ -19,10 +36,24 @@ app.get("/", (req, res) => {
 });
 
 // API route
-// Example: GET /api/v1/movies?title=matrix
 app.use("/api/v1/movies", moviesRoutes);
 
-// Start server
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+// Ports
+const HTTP_PORT = process.env.HTTP_PORT || 3000;
+const HTTPS_PORT = process.env.HTTPS_PORT || 3443;
+
+// SSL Options for HTTPS
+const sslOptions = {
+  key: fs.readFileSync("server.key"),      // Update path as needed
+  cert: fs.readFileSync("server.cert"),
+};
+
+// Start HTTP server
+http.createServer(app).listen(HTTP_PORT, () => {
+  console.log(`HTTP server running on http://localhost:${HTTP_PORT}`);
+});
+
+// Start HTTPS server
+https.createServer(sslOptions, app).listen(HTTPS_PORT, () => {
+  console.log(`HTTPS server running on https://localhost:${HTTPS_PORT}`);
 });
