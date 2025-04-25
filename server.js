@@ -17,7 +17,8 @@ app.use(express.json());
 // CORS: Allow only trusted domains (update as needed)
 const allowedOrigins = [
   "http://localhost:3000",           // for local dev
-  "https://your-frontend.com"        // add your real domains
+  "http://127.0.0.1:5500",           // <--- ADDED for Live Server local testing!
+  "https://your-frontend.com"        // add your real domains here!
 ];
 app.use(cors({
   origin: function (origin, callback) {
@@ -32,7 +33,7 @@ app.use(cors({
 
 // Test route
 app.get("/", (req, res) => {
-    res.send("Hello and Welcome!");
+  res.send("Hello and Welcome!");
 });
 
 // API route
